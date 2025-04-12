@@ -1,0 +1,41 @@
+# 编译生成的文件
+*.o
+*.obj
+*.a
+*.so
+*.dll
+*.exe
+
+# 调试信息文件
+*.pdb
+*.ilk
+
+# 构建目录
+build/
+out/
+dist/
+
+# IDE和编辑器生成的文件
+.vscode/
+.idea/
+*.suo
+*.ncb
+*.user
+*.aps
+*.idb
+*.pch
+*.sdf
+*.opensdf
+
+# 日志文件
+*.log
+
+# 临时文件
+*.tmp
+*.temp
+
+# 自动生成的文档
+docs/    
+
+# system
+.DS_Store
