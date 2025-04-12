@@ -1,35 +1,55 @@
+// main.cpp
 #include "ResourceHandler.hpp"
-#include <memory>
 #include <iostream>
 
+using namespace MemoryManagement;
+
 int main() {
-    // 创建一个 ResourceHandler 对象，用于管理资源
-    MemoryManagement::ResourceHandler handler;
-
-    // Item 18: 创建一个带有自定义数组删除器的 unique_ptr
-    // 自定义删除器，用于释放动态分配的数组
-    auto arrDeleter = [](int* p) { delete[] p; };
-    // 创建一个 unique_ptr 来管理动态分配的整数数组
-    // 数组初始化为 {1, 2, 3}，大小为 5
-    std::unique_ptr<int[], decltype(arrDeleter)> arrayResource(new int[5]{1, 2, 3}, arrDeleter);
-
-    // Item 18: 所有权转移演示
-    // 使用 std::make_unique 创建一个指向整数 42 的 unique_ptr，并将其所有权转移给 handler
-    handler.addResource(std::make_unique<int>(42));
-    // 使用 std::make_unique 创建一个指向整数 99 的 unique_ptr，并将其所有权转移给 handler
-    handler.addResource(std::make_unique<int>(99));
-
-    // Item 18: 共享所有权示例
-    // 使用 std::make_shared 创建一个指向 std::vector<int> 的 shared_ptr
-    // 向量初始化为 {10, 20}
-    auto sharedData = std::make_shared<std::vector<int>>(std::initializer_list<int>{10, 20});
-    // 将 shared_ptr 传递给 handler，实现资源的共享所有权
-    handler.shareResource(sharedData);
-
-    // 调用 handler 的 printResources 方法，打印管理的资源信息
-    handler.printResources();
-
-    // Item 18: unique_ptr 会在离开作用域时自动释放资源
-    // 程序正常结束，返回 0
+    try {
+        std::cout << "===== 智能指针演示开始 =====" << std::endl;
+        
+        // 创建资源处理器
+        ResourceHandler handler;
+        
+        // 条款17: 以独立语句将newed对象置入智能指针
+        // 创建独占资源
+        {
+            auto memResource = std::make_unique<MemoryResource>(1, "内存缓存", 1024);
+            handler.addExclusiveResource(std::move(memResource));
+        }
+        
+        // 创建另一个独占资源
+        handler.addExclusiveResource(std::make_unique<FileResource>(2, "配置文件", "/etc/config.json"));
+        
+        // 条款14: 在资源管理类中小心copying行为
+        // 创建共享资源
+        auto logFile = std::make_shared<FileResource>(3, "日志文件", "/var/log/app.log");
+        handler.addSharedResource(logFile);
+        
+        // 创建另一个引用到同一个共享资源
+        auto backupHandler = [logFile] {
+            std::cout << "备份处理器也使用同一个日志文件，引用计数=" << logFile.use_count() << std::endl;
+        };
+        backupHandler();
+        
+        // 打印所有资源
+        handler.printResources();
+        
+        // 使用资源
+        handler.useResource(1);
+        handler.useResource(2);
+        handler.useResource(3);
+        
+        // 尝试使用不存在的资源
+        handler.useResource(99);
+        
+        // 条款13: 以对象管理资源
+        // 程序结束时，ResourceHandler的析构函数会自动释放所有资源
+        std::cout << "\n===== 智能指针演示结束 =====" << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "异常: " << e.what() << std::endl;
+        return 1;
+    }
+    
     return 0;
 }
