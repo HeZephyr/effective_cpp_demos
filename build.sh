@@ -68,6 +68,11 @@ main() {
   local projects=(
     "smart_pointers"
     "raii_file_handler"
+    "pimpl"
+    "template_meta"
+    "policy_mode"
+    "thread_safe_singleton"
+    "expression_templates"
   )
   
   # 计数器
