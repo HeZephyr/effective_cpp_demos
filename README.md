@@ -112,10 +112,14 @@ cd raii_file_handler && make
   - 在模板元编程和表达式模板示例中实现
 
 ### 8. 定制new和delete
-- [ ] **条款49**: 了解new-handler的行为
-- [ ] **条款50**: 了解new和delete的合理替换时机
-- [ ] **条款51**: 编写new和delete时需固守常规
-- [ ] **条款52**: 写了placement new也要写placement delete
+- [x] **条款49**: 了解new-handler的行为
+  * 在自定义内存管理示例中实现
+- [x] **条款50**: 了解new和delete的合理替换时机
+  * 在自定义内存管理示例中实现
+- [x] **条款51**: 编写new和delete时需固守常规
+  * 在自定义内存管理示例中实现
+- [x] **条款52**: 写了placement new也要写placement delete
+  * 在自定义内存管理示例中实现
 
 ### 9. 杂项讨论
 - [x] **条款53**: 不要轻忽编译器的警告
@@ -145,6 +149,9 @@ cd raii_file_handler && make
 
 ### 表达式模板
 条款44, 48
+
+### 自定义内存管理
+条款49, 50, 51, 52
 
 ## 参考资料
 
